@@ -42,6 +42,11 @@ class Address
      */
     private $geo;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Users", mappedBy="address", cascade={"persist", "remove"})
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -103,6 +108,24 @@ class Address
     public function setGeo(Geo $geo): self
     {
         $this->geo = $geo;
+
+        return $this;
+    }
+
+    public function getUser(): ?Users
+    {
+        return $this->user;
+    }
+
+    public function setUser(?Users $user): self
+    {
+        $this->user = $user;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newAddress = $user === null ? null : $this;
+        if ($newAddress !== $user->getAddress()) {
+            $user->setAddress($newAddress);
+        }
 
         return $this;
     }
