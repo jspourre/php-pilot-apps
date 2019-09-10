@@ -19,6 +19,20 @@ class UsersRepository extends ServiceEntityRepository
         parent::__construct($registry, Users::class);
     }
 
+    public function findUserWithGeo()
+    {
+        $entityManager = $this->getEntityManager();
+
+        return $entityManager->createQuery(
+            "SELECT u.name, g.lat, g.lng 
+            FROM App\Entity\Users u 
+            LEFT JOIN u.address a 
+            LEFT JOIN a.geo g "
+            )
+            ->execute()
+            
+        ;
+    }
     // /**
     //  * @return Users[] Returns an array of Users objects
     //  */

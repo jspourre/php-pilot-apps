@@ -54,7 +54,7 @@ class Users
     private $compagny;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Posts", mappedBy="userId")
+     * @ORM\OneToMany(targetEntity="App\Entity\Posts", mappedBy="userId", cascade={"persist"})
      */
     private $posts;
 
@@ -66,6 +66,13 @@ class Users
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getName(): ?string
