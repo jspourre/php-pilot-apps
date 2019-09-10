@@ -74,6 +74,7 @@ class ImportPostsCommand extends ImportUserCommand
                 $post->setBody($json->title);
                 $post->setUserId($user_array[$json->userId]);
                 $this->em->persist($post);
+                $sucess_nb++;
             }
     
         }
