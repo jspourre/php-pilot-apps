@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Users lists{% endblock %}
+
+{% block body %}
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+     <div id="mapid" ></div>
+    <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Website</th>
+                <th>adress</th>
+                <th>company</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.phone }}</td>
+                <td><a href='{{ user.website }}'>{{ user.website }} </a></td>
+                <td>
+                    <address> 
+                    {{ user.address.suite }}, {{user.address.street}}</br>
+                    {{ user.address.city }} , {{ user.address.zipcode}}
+                    </address> 
+                </td>
+                 <td>
+                    {{ user.compagny.name }}</br>
+                    {{ user.compagny.bs }} <br>
+                    {{ user.compagny.catchPhrase }}
+                </td>
+                <td>
+                    <a href="{{ path('users_show', {'id': user.id}) }}">show</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+           
+    {{ encore_entry_script_tags('leaflet') }}
+    <script>
+                        //prévoir l'utilisation d'un token
+            var mymap = L.map('mapid').setView([51.505, -0.09], 2);
+            
+            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+                maxZoom: 18,
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+                '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                id: 'mapbox.streets'
+            }).addTo(mymap);
+
+            var geos = {{ geo|json_encode|raw }};
+
+            console.log(geos);
+            
+            for (var i = 0; i < geos.length; i++) {
+                    mark = new L.marker([parseInt(geos[i].lat), parseInt(geos[i].lng)])
+                    .bindPopup(geos[i].name)
+                    .addTo(mymap);
+                    mark.on('mouseover', function (e) {
+                    this.openPopup();
+        });
+                console.log(L.marker([parseInt(geos[i].lng), parseInt(geos[i].lat)]))
+            }     
+
+    </script>
+           
+            
+        
+{% endblock %}
+
+

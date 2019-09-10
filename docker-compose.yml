@@ -1,0 +1,38 @@
+version: '3'
+services:
+    apache:
+        build: .docker/apache
+        container_name: pilot_apps_apache
+        ports:
+          - 80:80
+        volumes:
+          - .docker/config/vhosts:/etc/apache2/sites-enabled
+          - .:/home/wwwroot/sf4
+        depends_on:
+          - php
+
+    php:
+        build: .docker/php
+        container_name: pilot_apps_php
+        volumes:
+          - .:/home/wwwroot/sf4
+        links:
+          -  mysql:db      
+    mysql:
+        image: mysql:5.7
+        environment:
+          MYSQL_ROOT_PASSWORD: rootpw
+          MYSQL_USER: user
+          MYSQL_PASSWORD: user
+          MYSQL_DATABASE: pilot-app
+        volumes:
+          - .docker/mysql:/var/lib/mysql
+        ports:
+          - 3306:3306
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+          - 8080:8080
+volumes:
+    mysql:
