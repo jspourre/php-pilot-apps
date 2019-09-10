@@ -17,12 +17,12 @@ class Geo
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=8)
+     * @ORM\Column(type="string", length=16)
      */
     private $lat;
 
     /**
-     * @ORM\Column(type="string", length=8)
+     * @ORM\Column(type="string", length=16)
      */
     private $lng;
 
