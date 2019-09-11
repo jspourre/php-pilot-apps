@@ -12,6 +12,10 @@
 1. clone project:
 
 		git clone git@github.com:jspourre/php-pilot-apps.git
+	
+    or 
+  
+	 	git clone https://github.com/jspourre/php-pilot-apps.git
 
 2. go to the folder:
 
